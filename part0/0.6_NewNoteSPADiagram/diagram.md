@@ -11,7 +11,7 @@ sequenceDiagram
 
     Note right of browser: JS calls redrawNotes() to update HTML in browser
 
-	browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+	browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
 	activate server
 	server-->>browser: JSON: message: "note created"
 	deactivate server
