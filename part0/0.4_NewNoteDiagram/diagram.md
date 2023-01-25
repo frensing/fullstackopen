@@ -2,7 +2,16 @@
 sequenceDiagram
     participant browser
     participant server
-    
+
+	Note right of browser: The user fills in the input field and clicks the 'submit' button
+
+	browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+	activate server
+	server-->>browser: 302 - redirect : /notes
+	deactivate server
+
+	Note right of browser: The browser accepts the answer and follows its instruction to request the /notes page
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
     server-->>browser: HTML document
