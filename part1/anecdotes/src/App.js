@@ -29,13 +29,15 @@ const App = () => {
     <>
       <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
+      <p>has {votes[selected]} votes</p>
       <div>
         <button onClick={() => vote(selected)}>vote</button>
         <button onClick={() => setSelected(getRandom())}>next anecdote</button>
       </div>
 
       <h2>Anecdote with the most votes</h2>
-      {anecdotes[mostVoted()]}
+      {anecdotes[mostVoted]}
+      <p>has {votes[mostVoted]} votes</p>
     </>
   )
 }
