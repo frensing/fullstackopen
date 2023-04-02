@@ -15,7 +15,7 @@ const PersonForm = ({states, service, notify}) => {
     }
 
     const existingPerson = persons.find(p => p.name === newName)
-    if (existingPerson !== undefined) {
+    if (existingPerson) {
       if (window.confirm(`${person.name} is already added to the phonebook, replace the old number with a new one?`)) {
         const id = existingPerson.id
         service
