@@ -1,4 +1,4 @@
-const PersonForm = ({states}) => {
+const PersonForm = ({states, service}) => {
   const [persons, setPersons] = states['persons']
   const [newName, setNewName] = states['name']
   const [newNumber, setNewNumber] = states['number']
@@ -20,9 +20,13 @@ const PersonForm = ({states}) => {
       number: newNumber
     }
 
-    setPersons(persons.concat(person))
-    setNewName('')
-    setNewNumber('')
+    service
+      .create(person)
+      .then(createdPerson => {
+        setPersons(persons.concat(createdPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   return (
