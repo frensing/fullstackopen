@@ -24,7 +24,7 @@ const App = () => {
   return (
     <div>
       find countries: <input value={search} onChange={handleSearch} />
-      <CountryNameList countries={countries} filter={search} />
+      <CountryNameList countries={countries} filterState={[search, setSearch]} />
     </div>
   );
 }
