@@ -9,24 +9,32 @@ const PersonForm = ({states, service}) => {
   const addPerson = (event) => {
     event.preventDefault()
     
-    if (persons.filter(person => person.name === newName).length !== 0) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-    
     const person = {
-      id: persons.length + 1,
       name: newName,
       number: newNumber
     }
 
-    service
-      .createPerson(person)
-      .then(createdPerson => {
-        setPersons(persons.concat(createdPerson))
-        setNewName('')
-        setNewNumber('')
-      })
+    const existingPerson = persons.find(p => p.name === newName)
+    if (existingPerson !== undefined) {
+      if (window.confirm(`${person.name} is already added to the phonebook, replace the old number with a new one?`)) {
+        const id = existingPerson.id
+        service
+          .updatePerson(id, person)
+          .then(updatedPerson => {
+            setPersons(persons.map(p => p.id !== id ? p : updatedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } else {
+      service
+        .createPerson(person)
+        .then(createdPerson => {
+          setPersons(persons.concat(createdPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
   }
 
   return (

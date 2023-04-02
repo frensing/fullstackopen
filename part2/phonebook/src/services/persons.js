@@ -6,10 +6,16 @@ const getAll = () => {
   return axios.get(baseUrl)
 }
 
-const createPerson = newPerson => {
+const createPerson = (newPerson) => {
   return axios
     .post(baseUrl, newPerson)
     .then(response => response.data)
+}
+
+const updatePerson = (id, person) => {
+  return axios
+    .put(`${baseUrl}/${id}`, person)
+    .then(res => res.data)
 }
 
 const deletePerson = id => {
@@ -17,4 +23,4 @@ const deletePerson = id => {
     .delete(`${baseUrl}/${id}`)
 }
 
-export default {getAll, createPerson, deletePerson}
+export default {getAll, createPerson, updatePerson, deletePerson}
