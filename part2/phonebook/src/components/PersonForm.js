@@ -1,4 +1,4 @@
-const PersonForm = ({states, service}) => {
+const PersonForm = ({states, service, notify}) => {
   const [persons, setPersons] = states['persons']
   const [newName, setNewName] = states['name']
   const [newNumber, setNewNumber] = states['number']
@@ -25,6 +25,10 @@ const PersonForm = ({states, service}) => {
             setNewName('')
             setNewNumber('')
           })
+          .catch(err => {
+            notify({text: `Information of ${person.name} has already been removed from the server.`, type: 'error'})
+            setTimeout(() => notify(null), 5000)
+          })
       }
     } else {
       service
@@ -33,6 +37,8 @@ const PersonForm = ({states, service}) => {
           setPersons(persons.concat(createdPerson))
           setNewName('')
           setNewNumber('')
+          notify({text: `Added ${person.name}`, type: 'info'})
+          setTimeout(() => notify(null), 5000)
         })
     }
   }
