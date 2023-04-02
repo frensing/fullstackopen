@@ -21,7 +21,7 @@ const PersonForm = ({states, service}) => {
     }
 
     service
-      .create(person)
+      .createPerson(person)
       .then(createdPerson => {
         setPersons(persons.concat(createdPerson))
         setNewName('')
