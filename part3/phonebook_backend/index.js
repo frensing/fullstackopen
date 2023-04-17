@@ -30,7 +30,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
   if (!body.name) {
@@ -44,9 +44,11 @@ app.post('/api/persons', (req, res) => {
     name: body.name,
     number: body.number
   })
-  person.save().then(savedPerson => {
-    res.json(savedPerson)
-  })
+  person.save()
+    .then(savedPerson => {
+      res.json(savedPerson)
+    })
+    .catch(e => next(e))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -69,7 +71,7 @@ app.delete('/api/persons/:id', (req, res) => {
     .catch(e => next(e))
 })
 
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
   const body = req.body
 
   console.log(body)
@@ -79,9 +81,15 @@ app.put('/api/persons/:id', (req, res) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(req.params.id, person, {new: true})
+  Person.findByIdAndUpdate(req.params.id, person, {
+      new: true, runValidators: true, context: 'query'
+    })
     .then(uPerson => {
-      res.json(uPerson)
+      if (uPerson) {
+        res.json(uPerson)
+      } else {
+        res.status(400).json({error: `Information of ${person.name} has already been removed from the server.`})
+      }
     })
     .catch(e => next(e))
 })
@@ -101,6 +109,8 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === 'CastError') {
     return res.status(400).send({error: 'malformatted id'})
+  } else if (error.name === 'ValidationError') {
+    return res.status(400).json({error: error.message})
   }
 
   next(error)

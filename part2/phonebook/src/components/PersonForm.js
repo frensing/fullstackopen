@@ -25,9 +25,9 @@ const PersonForm = ({states, service, notify}) => {
             setNewName('')
             setNewNumber('')
           })
-          .catch(err => {
-            notify({text: `Information of ${person.name} has already been removed from the server.`, type: 'error'})
-            setTimeout(() => notify(null), 5000)
+          .catch(e => {
+            notify({text: e.response.data.error, type: 'error'})
+              setTimeout(() => notify(null), 5000)
           })
       }
     } else {
@@ -39,6 +39,10 @@ const PersonForm = ({states, service, notify}) => {
           setNewNumber('')
           notify({text: `Added ${person.name}`, type: 'info'})
           setTimeout(() => notify(null), 5000)
+        })
+        .catch(e => {
+          notify({text: e.response.data.error, type: 'error'})
+            setTimeout(() => notify(null), 5000)
         })
     }
   }
