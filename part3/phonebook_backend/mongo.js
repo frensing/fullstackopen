@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-if (process.argv.length != 3 && process.argv.length != 5) {
+if (process.argv.length !== 3 && process.argv.length !== 5) {
   console.log('give either just password as argument, or password, name, and number as arguments')
   process.exit(1)
 }
@@ -19,7 +19,7 @@ const personSchema = mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-if (process.argv.length == 5){
+if (process.argv.length === 5){
   const person = new Person({
     name: process.argv[3],
     number: process.argv[4]
@@ -29,7 +29,7 @@ if (process.argv.length == 5){
     console.log('added', res.name, 'number', res.number, 'to phonebook')
     mongoose.connection.close()
   })
-} else if (process.argv.length == 3) {
+} else if (process.argv.length === 3) {
   Person.find({}).then(res => {
     console.log('phonebook:')
     res.forEach(p => {

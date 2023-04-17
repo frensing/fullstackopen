@@ -6,7 +6,7 @@ const app = express()
 
 const Person = require('./models/person')
 
-morgan.token('body', (req, res) => JSON.stringify(req.body))
+morgan.token('body', (req) => JSON.stringify(req.body))
 
 app.use(express.static('build'))
 app.use(express.json())
@@ -55,9 +55,9 @@ app.get('/api/persons/:id', (req, res, next) => {
     .catch(e => next(e))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(r => {
+    .then(() => {
       res.status(204).end()
     })
     .catch(e => next(e))
@@ -73,14 +73,12 @@ app.put('/api/persons/:id', (req, res, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(req.params.id, person, {
-      new: true, runValidators: true, context: 'query'
-    })
+  Person.findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: 'query' })
     .then(uPerson => {
       if (uPerson) {
         res.json(uPerson)
       } else {
-        res.status(400).json({error: `Information of ${person.name} has already been removed from the server.`})
+        res.status(400).json({ error: `Information of ${person.name} has already been removed from the server.` })
       }
     })
     .catch(e => next(e))
@@ -92,7 +90,7 @@ app.listen(PORT, () => {
 })
 
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({error: 'unkown endpoint'})
+  res.status(404).send({ error: 'unkown endpoint' })
 }
 app.use(unknownEndpoint)
 
@@ -100,9 +98,9 @@ const errorHandler = (error, req, res, next) => {
   console.log(error)
 
   if (error.name === 'CastError') {
-    return res.status(400).send({error: 'malformatted id'})
+    return res.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
-    return res.status(400).json({error: error.message})
+    return res.status(400).json({ error: error.message })
   }
 
   next(error)
