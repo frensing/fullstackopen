@@ -93,6 +93,23 @@ app.delete('/api/persons/:id', (req, res) => {
     .catch(e => next(e))
 })
 
+app.put('/api/persons/:id', (req, res) => {
+  const body = req.body
+
+  console.log(body)
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(req.params.id, person, {new: true})
+    .then(uPerson => {
+      res.json(uPerson)
+    })
+    .catch(e => next(e))
+})
+
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
