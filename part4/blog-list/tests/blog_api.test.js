@@ -9,10 +9,7 @@ const Blog = require('../models/blog')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  const blogObjects = helper.initialBlogs
-    .map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  await Blog.insertMany(helper.initialBlogs)
 })
 
 
@@ -42,11 +39,15 @@ describe('fetching blogs', () => {
 
 describe('adding blogs', () => {
   test('4.10 - a valid blog can be added', async () => {
+    const users = await helper.usersInDb()
+    const user = users[0]
+
     const newBlog = {
       title: 'Test Blog',
       author: 'Test Author',
       url: 'https://test.com/',
-      likes: 1
+      likes: 1,
+      userId: user.id
     }
 
     await api
@@ -63,10 +64,14 @@ describe('adding blogs', () => {
   })
 
   test('4.11 - blog without likes has 0 likes', async () => {
+    const users = await helper.usersInDb()
+    const user = users[0]
+
     const newBlog = {
       title: 'Test Blog',
       author: 'Test Author',
-      url: 'https://test.com/'
+      url: 'https://test.com/',
+      userId: user.id
     }
 
     const blogAdded = await api
@@ -79,10 +84,14 @@ describe('adding blogs', () => {
   })
 
   test('4.12 - blog without title is not added', async () => {
+    const users = await helper.usersInDb()
+    const user = users[0]
+
     const newBlog = {
       author: 'Test Author',
       url: 'https://test.com/',
-      likes: 1
+      likes: 1,
+      userId: user.id
     }
 
     await api
@@ -96,10 +105,14 @@ describe('adding blogs', () => {
   })
 
   test('4.12 - blog without url is not added', async () => {
+    const users = await helper.usersInDb()
+    const user = users[0]
+
     const newBlog = {
       title: 'Test Title',
       author: 'Test Author',
-      likes: 1
+      likes: 1,
+      userId: user.id
     }
 
     await api
