@@ -182,8 +182,6 @@ describe('accessing and updating a single blog', () => {
 })
 
 
-
-
 afterAll(async () => {
   await mongoose.connection.close()
 })
