@@ -27,13 +27,24 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  let groupedAuthors = lodash.groupBy(blogs, b => b.author)
-  groupedAuthors = lodash.mapValues(groupedAuthors, v => v.length)
-  const maxBlogs = Math.max(...lodash.values(groupedAuthors))
-  const author = lodash.findKey(groupedAuthors, a => a === maxBlogs)
+  const groupedAuthors = lodash.groupBy(blogs, b => b.author)
+  const authorsBlogs = lodash.mapValues(groupedAuthors, v => v.length)
+  const maxBlogs = Math.max(...lodash.values(authorsBlogs))
+  const author = lodash.findKey(authorsBlogs, a => a === maxBlogs)
   return {
     author: author,
     blogs: maxBlogs
+  }
+}
+
+const mostLikes = (blogs) => {
+  const groupedAuthors = lodash.groupBy(blogs, b => b.author)
+  const authorsLikes = lodash.mapValues(groupedAuthors, a => a.map(b => b.likes).reduce((s,i) => s+i, 0))
+  const maxLikes = Math.max(...lodash.values(authorsLikes))
+  const author = lodash.findKey(authorsLikes, a => a === maxLikes)
+  return {
+    author: author,
+    likes: maxLikes
   }
 }
 
@@ -41,5 +52,6 @@ module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
