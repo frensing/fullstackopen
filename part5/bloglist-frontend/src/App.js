@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [notification, setNotification] = useState(null)  
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -16,6 +18,14 @@ const App = () => {
     )
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('user')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -23,10 +33,22 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      console.log(user)
+      window.localStorage.setItem('user', JSON.stringify(user))
     } catch (exception) {
+      setNotification({
+        text: 'Wrong credentials',
+        type: 'error'    
+      })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       console.error('Wrong credentials')
     }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.clear()
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -57,7 +79,7 @@ const App = () => {
   const bloglist = () => (
     <>
       <h2>blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       { blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -66,6 +88,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notification} />
       { !user ?
         loginForm() :
         bloglist() }
