@@ -31,6 +31,13 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message) => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -40,15 +47,15 @@ const App = () => {
       setPassword('')
       blogService.setToken(user.token)
       window.localStorage.setItem('user', JSON.stringify(user))
+      notify({
+        text: 'Successfully logged in!',
+        type: 'info'
+      })
     } catch (exception) {
-      setNotification({
+      notify({
         text: 'Wrong credentials',
         type: 'error'    
       })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-      console.error('Wrong credentials')
     }
   }
 
@@ -56,6 +63,10 @@ const App = () => {
     window.localStorage.clear()
     setUser(null)
     blogService.setToken(null)
+    notify({
+      text: 'Successfully logged out!',
+      type: 'info'
+    })
   }
 
   const loginForm = () => (
@@ -94,6 +105,11 @@ const App = () => {
     setNewTitle('')
     setNewAuthor('')
     setNewUrl('')
+
+    notify({
+      text: `new blog "${blog.title}" by ${blog.author} added!`,
+      type: 'info'
+    })
   }
 
   const handleTitleChange = (event) => setNewTitle(event.target.value)
