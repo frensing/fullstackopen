@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Togglable from "./Togglable"
 
-const Blog = ({blog}) => {
+const Blog = ({ blog, like }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,7 +21,7 @@ const Blog = ({blog}) => {
         <button onClick={() => setVisible(!visible)}>view</button> :
         <div>
           <div>{blog.url}</div>
-          <div>likes {blog.likes} <button>like</button></div>
+          <div>likes {blog.likes} <button onClick={like}>like</button></div>
           <div>{blog.user.name}</div>
         </div>}
     </div>
