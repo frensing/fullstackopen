@@ -6,7 +6,11 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState(null)  
+  const [notification, setNotification] = useState(null)
+
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -23,6 +27,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -33,6 +38,7 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      blogService.setToken(user.token)
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch (exception) {
       setNotification({
@@ -49,6 +55,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
+    blogService.setToken(null)
   }
 
   const loginForm = () => (
@@ -56,16 +63,14 @@ const App = () => {
       <h2>log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
-          username
-          <input
+          username: <input
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)} />
         </div>
         <div>
-          password
-          <input
+          password: <input
             type="password"
             value={password}
             name="Password"
@@ -76,8 +81,40 @@ const App = () => {
     </>
   )
 
+  const addBlog = async (event) => {
+    event.preventDefault()
+    const newBlog = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+    const blog = await blogService.create(newBlog)
+    setBlogs(blogs.concat(blog))
+
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
+  }
+
+  const handleTitleChange = (event) => setNewTitle(event.target.value)
+  const handleAuthorChange = (event) => setNewAuthor(event.target.value)
+  const handleUrlChange = (event) => setNewUrl(event.target.value)
+
+  const blogForm = () => (
+    <>
+      <form onSubmit={addBlog}>
+        <h2>create new</h2>
+        <div>title: <input value={newTitle} onChange={handleTitleChange} /></div>
+        <div>author: <input value={newAuthor} onChange={handleAuthorChange} /></div>
+        <div>url: <input value={newUrl} onChange={handleUrlChange} /></div>
+        <button type="submit">create</button>
+      </form>
+    </>
+  )
+
   const bloglist = () => (
     <>
+      {blogForm()}
       <h2>blogs</h2>
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       { blogs.map(blog =>
