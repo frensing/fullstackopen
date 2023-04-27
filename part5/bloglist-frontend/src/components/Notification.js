@@ -1,4 +1,4 @@
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
   const baseStyle = {
     background: 'lightgrey',
     borderStyle: 'solid',
@@ -8,15 +8,15 @@ const Notification = ({message}) => {
   }
   const styles = {
     info: {
-      ...baseStyle, 
+      ...baseStyle,
       color: 'green'
     },
     warn: {
-      ...baseStyle, 
+      ...baseStyle,
       color: 'yellow'
     },
     error: {
-      ...baseStyle, 
+      ...baseStyle,
       color: 'red'
     }
   }

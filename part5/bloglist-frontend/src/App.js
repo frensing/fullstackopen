@@ -57,7 +57,7 @@ const App = () => {
     } catch (exception) {
       notify({
         text: 'Wrong credentials',
-        type: 'error'    
+        type: 'error'
       })
     }
   }
@@ -110,9 +110,9 @@ const App = () => {
   const bloglist = () => (
     <>
       { blogs.map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog} 
+        <Blog
+          key={blog.id}
+          blog={blog}
           like={() => addLike(blog)}
           removeBlog={() => removeBlog(blog)}/>
       )}
