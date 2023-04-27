@@ -17,9 +17,11 @@ const App = () => {
 
   const blogFromRef = useRef()
 
+  const setBlogsSorted = blogs => setBlogs(blogs.sort((a,b) => b.likes - a.likes))
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogsSorted(blogs)
     )
   }, [])
 
@@ -72,7 +74,7 @@ const App = () => {
 
   const addBlog = async (newBlog) => {
     const blog = await blogService.create(newBlog)
-    setBlogs(blogs.concat(blog))
+    setBlogsSorted(blogs.concat(blog))
     blogFromRef.current.toggleVisibility()
 
     notify({
@@ -86,7 +88,7 @@ const App = () => {
       ...blog,
       likes: blog.likes + 1
     })
-    setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
+    setBlogsSorted(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
   }
 
   const bloglist = () => (
