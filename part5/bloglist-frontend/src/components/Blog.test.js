@@ -50,4 +50,21 @@ describe('<Blog />', () => {
     const userElement = container.querySelector('.blogUser')
     expect(userElement).toBeDefined()
   })
+
+  test('like click-handler is called twice', async () => {
+    const likeFn = jest.fn()
+    const removeFn = jest.fn()
+
+    const { container } = render(<Blog blog={blog} like={likeFn} removeBlog={removeFn} />)
+
+    const user = userEvent.setup()
+    const detailsBtn = container.querySelector('.blogDetailsBtn')
+    await user.click(detailsBtn)
+
+    const likeBtn = container.querySelector('.blogLikeBtn')
+    await user.click(likeBtn)
+    await user.click(likeBtn)
+
+    expect(likeFn.mock.calls).toHaveLength(2)
+  })
 })

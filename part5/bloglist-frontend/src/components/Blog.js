@@ -23,7 +23,7 @@ const Blog = ({ blog, like, removeBlog }) => {
         <button className='blogDetailsBtn' onClick={() => setVisible(!visible)}>view</button> :
         <div>
           <div className='blogUrl'>{blog.url}</div>
-          <div className='blogLikes'>likes {blog.likes} <button onClick={like}>like</button></div>
+          <div className='blogLikes'>likes {blog.likes} <button className='blogLikeBtn' onClick={like}>like</button></div>
           <div className='blogUser'>{blog.user.name}</div>
           { addedByUser && <div><button onClick={removeBlog}>remove</button></div> }
         </div>}
