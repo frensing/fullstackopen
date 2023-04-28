@@ -1,12 +1,10 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-test('renders content', () => {
-  const likeFn = jest.fn()
-  const removeFn = jest.fn()
-
+describe('<Blog />', () => {
   const blog = {
     title: 'Blog Title',
     author: 'Blog Author',
@@ -18,17 +16,38 @@ test('renders content', () => {
     }
   }
 
-  const { container } = render(<Blog blog={blog} like={likeFn} removeBlog={removeFn} />)
+  test('renders content', () => {
+    const likeFn = jest.fn()
+    const removeFn = jest.fn()
 
-  const titleElement = container.querySelector('.blogTitle')
-  expect(titleElement).toBeDefined()
+    const { container } = render(<Blog blog={blog} like={likeFn} removeBlog={removeFn} />)
 
-  screen.debug()
+    const titleElement = container.querySelector('.blogTitle')
+    expect(titleElement).toBeDefined()
 
-  const urlElement = container.querySelector('.blogUrl')
-  expect(urlElement).toBeNull()
-  const likesElement = container.querySelector('.blogLikes')
-  expect(likesElement).toBeNull()
-  const userElement = container.querySelector('.blogUser')
-  expect(userElement).toBeNull()
+    const urlElement = container.querySelector('.blogUrl')
+    expect(urlElement).toBeNull()
+    const likesElement = container.querySelector('.blogLikes')
+    expect(likesElement).toBeNull()
+    const userElement = container.querySelector('.blogUser')
+    expect(userElement).toBeNull()
+  })
+
+  test('renders details after click', async () => {
+    const likeFn = jest.fn()
+    const removeFn = jest.fn()
+
+    const { container } = render(<Blog blog={blog} like={likeFn} removeBlog={removeFn} />)
+
+    const user = userEvent.setup()
+    const btn = container.querySelector('.blogDetailsBtn')
+    await user.click(btn)
+
+    const urlElement = container.querySelector('.blogUrl')
+    expect(urlElement).toBeDefined()
+    const likesElement = container.querySelector('.blogLikes')
+    expect(likesElement).toBeDefined()
+    const userElement = container.querySelector('.blogUser')
+    expect(userElement).toBeDefined()
+  })
 })
