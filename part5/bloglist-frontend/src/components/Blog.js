@@ -11,8 +11,13 @@ const Blog = ({ blog, like, removeBlog }) => {
 
   const [visible, setVisible] = useState(false)
 
-  const addedByUser = JSON.parse(window.localStorage.getItem('user'))
-    && blog.user.username === JSON.parse(window.localStorage.getItem('user')).username
+  const checkBlogUser = () => {
+    const loggedInUser = JSON.parse(window.localStorage.getItem('user'))
+    if (!loggedInUser) { return false }
+    return blog.user && blog.user.username === loggedInUser.username
+  }
+
+  const addedByUser = checkBlogUser()
 
   return (
     <div className="blog" style={blogStyle}>
