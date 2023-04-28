@@ -11,19 +11,20 @@ const Blog = ({ blog, like, removeBlog }) => {
 
   const [visible, setVisible] = useState(false)
 
-  const addedByUser = blog.user.username === JSON.parse(window.localStorage.getItem('user')).username
+  const addedByUser = JSON.parse(window.localStorage.getItem('user'))
+    && blog.user.username === JSON.parse(window.localStorage.getItem('user')).username
 
   return (
-    <div style={blogStyle}>
-      <div>
+    <div className="blog" style={blogStyle}>
+      <div className='blogTitle'>
         {blog.title} {blog.author}
       </div>
       { !visible ?
         <button onClick={() => setVisible(!visible)}>view</button> :
         <div>
-          <div>{blog.url}</div>
-          <div>likes {blog.likes} <button onClick={like}>like</button></div>
-          <div>{blog.user.name}</div>
+          <div className='blogUrl'>{blog.url}</div>
+          <div className='blogLikes'>likes {blog.likes} <button onClick={like}>like</button></div>
+          <div className='blogUser'>{blog.user.name}</div>
           { addedByUser && <div><button onClick={removeBlog}>remove</button></div> }
         </div>}
     </div>
