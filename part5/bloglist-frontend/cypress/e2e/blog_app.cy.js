@@ -78,9 +78,26 @@ describe('Blog app', function() {
           cy.login({ username: 'testuser2', password: 'password2' })
         })
 
-        it.only('can not see remove button', function() {
+        it('can not see remove button', function() {
           cy.get('.blogDetailsBtn').click()
           cy.get('.blog').contains('remove').should('not.exist')
+        })
+      })
+
+      describe('a second blog', function() {
+        beforeEach(function() {
+          cy.createBlog({ title: '2nd Blog', author: 'Tester', url: 'test.com' })
+        })
+
+        it('2nd blog has more likes', function() {
+          cy.get('.blog').eq(0).contains('Cypress Blog')
+          cy.get('.blog').eq(1).contains('2nd Blog')
+
+          cy.contains('2nd Blog').parent().contains('.blogDetailsBtn', 'view').click()
+          cy.contains('2nd Blog').parent().contains('.blogLikeBtn', 'like').click()
+
+          cy.get('.blog').eq(0).contains('2nd Blog')
+          cy.get('.blog').eq(1).contains('Cypress Blog')
         })
       })
     })
