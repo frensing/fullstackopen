@@ -1,12 +1,11 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    cy.request('POST', 'http://localhost:3003/api/users', {
+    cy.createUser({
       'username': 'testuser',
       'name': 'Test User',
       'password': 'password'
     })
-    cy.visit('http://localhost:3000')
   })
 
   it('5.17 - front page can be opened and shows login', () => {
@@ -67,6 +66,22 @@ describe('Blog app', function() {
         cy.get('.blog').contains('remove').click()
 
         cy.get('.blog').should('not.exist')
+      })
+
+      describe('A second user', function() {
+        beforeEach(function() {
+          cy.createUser({
+            'username': 'testuser2',
+            'name': 'Test2 User',
+            'password': 'password2'
+          })
+          cy.login({ username: 'testuser2', password: 'password2' })
+        })
+
+        it.only('can not see remove button', function() {
+          cy.get('.blogDetailsBtn').click()
+          cy.get('.blog').contains('remove').should('not.exist')
+        })
       })
     })
   })
