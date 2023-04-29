@@ -49,5 +49,18 @@ describe('Blog app', function() {
 
       cy.contains('A Cypress Blog')
     })
+
+    describe('And a blog exists', function() {
+      beforeEach(function() {
+        cy.createBlog({ title: 'Cypress Blog', author: 'Mr. Cypress', url: 'cypress.io' })
+      })
+
+      it('A user can like a blog', function(){
+        cy.get('.blogDetailsBtn').click()
+        cy.get('.blogLikes').contains('likes 0')
+        cy.get('.blogLikeBtn').click()
+        cy.get('.blogLikes').contains('likes 1')
+      })
+    })
   })
 })
