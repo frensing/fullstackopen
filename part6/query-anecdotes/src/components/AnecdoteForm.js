@@ -14,6 +14,13 @@ const AnecdoteForm = () => {
         payload: `anecdote '${newAnecdote.content}' added`
       })
       setTimeout(() => notificationDispatch({ type: 'CLEAR' }), 5000)
+    },
+    onError: (error) => {
+      notificationDispatch({
+        type: 'SET',
+        payload: error.response.data.error
+      })
+      setTimeout(() => notificationDispatch({ type: 'CLEAR' }), 5000)
     }
   })
 
