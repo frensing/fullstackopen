@@ -18,6 +18,8 @@ const Menu = () => {
   )
 }
 
+const Notification = ({ content }) => content ? <div>{content}</div> : null
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
@@ -102,6 +104,7 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
+  const navigate = useNavigate()
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -124,6 +127,9 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    navigate('/')
+    setNotification(`a new anecdote "${anecdote.content}" created!`)
+    setTimeout(() => setNotification(null), 5000)
   }
 
   const anecdoteById = (id) =>
@@ -147,6 +153,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification content={notification} />
       <Routes>
         <Route path='/anecdotes/:id' element={<Anecdote anecdote={anecdote} /> } />
         <Route path='/about' element={<About />} />
