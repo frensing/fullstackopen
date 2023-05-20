@@ -70,7 +70,6 @@ const CreateNew = (props) => {
   const author = useField('text')
   const info = useField('text')
 
-
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -81,10 +80,17 @@ const CreateNew = (props) => {
     })
   }
 
+  const handleReset = (e) => {
+    e.target.reset()
+    content.onReset()
+    author.onReset()
+    info.onReset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
           <input {...content} />
@@ -97,7 +103,8 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <input type='submit' value='create' />
+        <input type='reset' value='reset' />
       </form>
     </div>
   )
