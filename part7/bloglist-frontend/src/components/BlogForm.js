@@ -1,30 +1,39 @@
-import { useState } from "react";
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ createBlog }) => {
-  const [newTitle, setNewTitle] = useState("");
-  const [newAuthor, setNewAuthor] = useState("");
-  const [newUrl, setNewUrl] = useState("");
+const BlogForm = ({ toggle }) => {
+  const dispatch = useDispatch()
+
+  console.log(toggle)
+
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
 
   const addBlog = (event) => {
-    event.preventDefault();
+    event.preventDefault()
+    dispatch(
+      createBlog({
+        title: newTitle,
+        author: newAuthor,
+        url: newUrl,
+      })
+    )
 
-    createBlog({
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-    });
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
 
-    setNewTitle("");
-    setNewAuthor("");
-    setNewUrl("");
-  };
+    toggle()
+  }
 
   return (
     <>
       <form onSubmit={addBlog}>
         <h2>create new</h2>
         <div>
-          title:{" "}
+          title:{' '}
           <input
             className="newTitleInp"
             value={newTitle}
@@ -32,7 +41,7 @@ const BlogForm = ({ createBlog }) => {
           />
         </div>
         <div>
-          author:{" "}
+          author:{' '}
           <input
             className="newAuthorInp"
             value={newAuthor}
@@ -40,7 +49,7 @@ const BlogForm = ({ createBlog }) => {
           />
         </div>
         <div>
-          url:{" "}
+          url:{' '}
           <input
             className="newUrlInp"
             value={newUrl}
@@ -52,7 +61,7 @@ const BlogForm = ({ createBlog }) => {
         </button>
       </form>
     </>
-  );
-};
+  )
+}
 
-export default BlogForm;
+export default BlogForm

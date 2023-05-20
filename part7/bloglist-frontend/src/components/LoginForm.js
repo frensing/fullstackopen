@@ -1,48 +1,50 @@
-import PropTypes from "prop-types";
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { login } from '../reducers/userReducer'
 
-const LoginForm = ({
-  handleLogin,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
-}) => (
-  <>
-    <h2>log in to application</h2>
-    <form onSubmit={handleLogin}>
-      <div>
-        username:{" "}
-        <input
-          id="username"
-          type="text"
-          value={username}
-          name="Username"
-          onChange={handleUsernameChange}
-        />
-      </div>
-      <div>
-        password:{" "}
-        <input
-          id="password"
-          type="password"
-          value={password}
-          name="Password"
-          onChange={handlePasswordChange}
-        />
-      </div>
-      <button id="loginBtn" type="submit">
-        login
-      </button>
-    </form>
-  </>
-);
+const LoginForm = () => {
+  const dispatch = useDispatch()
 
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
-};
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-export default LoginForm;
+  const handleLogin = (event) => {
+    event.preventDefault()
+    dispatch(login(username, password))
+    setUsername('')
+    setPassword('')
+  }
+
+  return (
+    <>
+      <h2>log in to application</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          username:{' '}
+          <input
+            id="username"
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password:{' '}
+          <input
+            id="password"
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button id="loginBtn" type="submit">
+          login
+        </button>
+      </form>
+    </>
+  )
+}
+
+export default LoginForm
