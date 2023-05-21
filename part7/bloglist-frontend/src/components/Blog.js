@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const user = useSelector((state) => state.user)
 
@@ -13,6 +15,7 @@ const Blog = ({ blog }) => {
 
   const onRemove = () => {
     if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
+      navigate('/')
       dispatch(removeBlog(blog))
       dispatch(
         setNotification({

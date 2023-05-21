@@ -20,6 +20,7 @@ const userSlice = createSlice({
 export const initUser = () => {
   return (dispatch) => {
     const userInStorage = window.localStorage.getItem('user')
+    console.log('storage', userInStorage)
     if (userInStorage) {
       const user = JSON.parse(userInStorage)
       dispatch(setUser(user))

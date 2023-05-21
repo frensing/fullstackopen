@@ -4,12 +4,13 @@ import { Routes, Route, useMatch } from 'react-router-dom'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import { initializeBlogs } from './reducers/blogReducer'
-import { initUser, logout } from './reducers/userReducer'
+import { initUser } from './reducers/userReducer'
 import BlogView from './components/BlogView'
 import UserView from './components/UserView'
 import { initializeUsers } from './reducers/usersReducer'
 import User from './components/User'
 import Blog from './components/Blog'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -34,20 +35,15 @@ const App = () => {
     ? blogs.find((b) => b.id === matchBlog.params.id)
     : null
 
-  console.log(users)
-
   return (
     <div>
+      <Navigation />
       <Notification />
       {!loggedInUser ? (
         <LoginForm />
       ) : (
         <>
           <h2>blogs</h2>
-          <p>
-            {loggedInUser.name} logged in{' '}
-            <button onClick={() => dispatch(logout())}>logout</button>
-          </p>
           <Routes>
             <Route path="/users/:id" element={<User user={user} />} />
             <Route path="/users" element={<UserView />} />
