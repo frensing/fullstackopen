@@ -5,8 +5,6 @@ import { createBlog } from '../reducers/blogReducer'
 const BlogForm = ({ toggle }) => {
   const dispatch = useDispatch()
 
-  console.log(toggle)
-
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
