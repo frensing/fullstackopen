@@ -1,3 +1,10 @@
+import { isNotNumber } from "./utils";
+
+interface CalculatorInput {
+  target: number;
+  dailyExerciseHours: number[];
+}
+
 interface Result {
   periodLength: number;
   trainingDays: number;
@@ -46,4 +53,30 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const parseArguments = (args: string[]): CalculatorInput => {
+  if (args.length <= 3) throw new Error("Please provide daily training times.");
+
+  const input = args.slice(2);
+
+  if (input.some(isNotNumber))
+    throw new Error("Provided values were not numbers!");
+
+  const target = Number(input[0]);
+  const dailyExerciseHours = input.slice(1).map(Number);
+
+  return {
+    target,
+    dailyExerciseHours,
+  };
+};
+
+try {
+  const { target, dailyExerciseHours } = parseArguments(process.argv);
+  console.log(calculateExercises(dailyExerciseHours, target));
+} catch (error: unknown) {
+  let errorMessage = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
