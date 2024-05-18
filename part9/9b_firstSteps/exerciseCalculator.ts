@@ -15,7 +15,7 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (
+export const calculateExercises = (
   dailyExerciseHours: number[],
   target: number
 ): Result => {
@@ -27,7 +27,6 @@ const calculateExercises = (
     dailyExerciseHours
       .map((x) => Math.abs(target - x))
       .reduce((a, b) => a + b) / dailyExerciseHours.length;
-  console.log(meanAbsoluteError);
 
   let rating;
   let ratingDescription;
