@@ -3,6 +3,8 @@
 
 sandbox/
 
+build/
+
 apt-key.gpg
 
 ### Node ###
