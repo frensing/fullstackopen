@@ -1,9 +1,9 @@
 interface TotalProps {
-  exerciseCount: number,
+  exerciseCount: number;
 }
 
 const Total = (props: TotalProps) => {
-  return <p>Number of exercises {props.exerciseCount}</p>
-}
+  return <p>Number of exercises {props.exerciseCount}</p>;
+};
 
 export default Total;
