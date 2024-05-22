@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Entry } from "./types";
-import { getAllEntries, createEntry } from "./entryService";
+import { Entry, Visibility, Weather } from "./types";
+import { getAllEntries, createEntry } from "./services/entryService";
 import axios from "axios";
 
 const App = () => {
@@ -52,22 +52,42 @@ const App = () => {
       <form onSubmit={entryCreation}>
         Date{" "}
         <input
+          type="date"
           value={newDate}
           onChange={(event) => setNewDate(event.target.value)}
         />
         <br />
         Visibility:
-        <input
-          value={newVisibility}
-          onChange={(event) => setNewVisibility(event.target.value)}
-        />
+        <div>
+          {Object.values(Visibility).map((v) => (
+            <div key={v.toString()}>
+              <input
+                type="radio"
+                name="visibility"
+                id={v.toString()}
+                onChange={() => setNewVisibility(v.toString())}
+                checked={newVisibility === v.toString()}
+              />
+              <label htmlFor={v.toString()}>{v.toString()}</label>
+            </div>
+          ))}
+        </div>
         <br />
         Weather:
-        <input
-          value={newWeather}
-          onChange={(event) => setNewWeather(event.target.value)}
-        />
-        <br />
+        <div>
+          {Object.values(Weather).map((v) => (
+            <div key={v.toString()}>
+              <input
+                type="radio"
+                name="weather"
+                id={v.toString()}
+                onChange={() => setNewWeather(v.toString())}
+                checked={newWeather === v.toString()}
+              />
+              <label htmlFor={v.toString()}>{v.toString()}</label>
+            </div>
+          ))}
+        </div>
         Comment:
         <input
           value={newComment}
