@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Entry } from "./types";
 import { getAllEntries, createEntry } from "./entryService";
+import axios from "axios";
 
 const App = () => {
   const [diaries, setDiaries] = useState<Entry[]>([]);
@@ -8,6 +9,7 @@ const App = () => {
   const [newVisibility, setNewVisibility] = useState("");
   const [newWeather, setNewWeather] = useState("");
   const [newComment, setNewComment] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     getAllEntries().then((data) => {
@@ -22,19 +24,31 @@ const App = () => {
       visibility: newVisibility,
       weather: newWeather,
       comment: newComment,
-    }).then((data) => {
-      setDiaries(diaries.concat(data));
-    });
-    setNewDate("");
-    setNewVisibility("");
-    setNewWeather("");
-    setNewComment("");
+    })
+      .then((data) => {
+        setDiaries(diaries.concat(data));
+
+        setNewDate("");
+        setNewVisibility("");
+        setNewWeather("");
+        setNewComment("");
+      })
+      .catch((e) => {
+        if (axios.isAxiosError(e) && e.response) {
+          setErrorMessage(e.response.data);
+          setTimeout(() => setErrorMessage(""), 5000);
+        } else {
+          setErrorMessage("Unknown Error");
+          setTimeout(() => setErrorMessage(""), 5000);
+        }
+      });
   };
 
   return (
     <>
       <h1>Flight Diary</h1>
       <h3>Add new entry</h3>
+      <p style={{ color: "#F00" }}>{errorMessage}</p>
       <form onSubmit={entryCreation}>
         Date{" "}
         <input
