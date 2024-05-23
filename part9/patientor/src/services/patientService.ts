@@ -1,5 +1,5 @@
 import { v1 as uuid } from "uuid";
-import patientData from "../../data/patients";
+import patientData from "../../data/patients-full";
 import { Patient, NonSensitivePatient, NewPatient } from "../types";
 
 const getPatients = (): Patient[] => {
