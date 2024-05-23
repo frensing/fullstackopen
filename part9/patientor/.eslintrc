@@ -26,6 +26,6 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     // "tsconfigRootDir": "./",
-    "project": "part9/patientor/tsconfig.json"
+    "project": "tsconfig.json"
   }
 }

@@ -2,11 +2,11 @@ import { v1 as uuid } from "uuid";
 import patientData from "../../data/patients";
 import { Patient, NonSensitivePatient, NewPatient } from "../types";
 
-const getEntries = (): Patient[] => {
+const getPatients = (): Patient[] => {
   return patientData;
 };
 
-const getNonSensitiveEntries = (): NonSensitivePatient[] => {
+const getNonSensitivePatients = (): NonSensitivePatient[] => {
   return patientData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -16,10 +16,21 @@ const getNonSensitiveEntries = (): NonSensitivePatient[] => {
   }));
 };
 
+const getPatient = (id: string): Patient => {
+  const patient = patientData.find((e) => e.id === id);
+
+  if (patient) {
+    return patient;
+  }
+
+  throw Error(`Could not find patient with id: ${id}`);
+};
+
 const addPatient = (patient: NewPatient) => {
   const newPatient = {
     id: uuid(),
     ...patient,
+    entries: [],
   };
 
   patientData.push(newPatient);
@@ -27,7 +38,8 @@ const addPatient = (patient: NewPatient) => {
 };
 
 export default {
-  getEntries,
-  getNonSensitiveEntries,
+  getPatients,
+  getNonSensitivePatients,
+  getPatient,
   addPatient,
 };
