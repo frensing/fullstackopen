@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Female, Male } from "@mui/icons-material";
+import { Female, Male, Transgender } from "@mui/icons-material";
 import { Gender, Patient } from "../../types";
 import { useEffect, useState } from "react";
 import EntryList from "./entryList";
@@ -26,7 +26,14 @@ const PatientPage = ({ patientService }: Props) => {
   return (
     <>
       <h3>
-        {patient.name} {patient.gender === Gender.Male ? <Male /> : <Female />}
+        {patient.name}{" "}
+        {patient.gender === Gender.Male ? (
+          <Male />
+        ) : patient.gender === Gender.Female ? (
+          <Female />
+        ) : (
+          <Transgender />
+        )}
       </h3>
       <div>SSN: {patient.ssn}</div>
       <div>Occupation: {patient.occupation}</div>
