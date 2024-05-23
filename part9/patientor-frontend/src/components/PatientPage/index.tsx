@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { Female, Male } from "@mui/icons-material";
 import { Gender, Patient } from "../../types";
 import { useEffect, useState } from "react";
+import EntryList from "./entryList";
 
 interface Props {
   patientService: (id: string) => Promise<Patient>;
@@ -29,6 +30,7 @@ const PatientPage = ({ patientService }: Props) => {
       </h3>
       <div>SSN: {patient.ssn}</div>
       <div>Occupation: {patient.occupation}</div>
+      <EntryList entries={patient.entries} />
     </>
   );
 };
