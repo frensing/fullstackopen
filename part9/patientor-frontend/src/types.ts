@@ -27,3 +27,8 @@ export interface Entry {
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
+
+export interface Diagnosis {
+  code: string;
+  name: string;
+}
