@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { Female, Male, Transgender } from "@mui/icons-material";
-import { Gender, Patient } from "../../types";
+import { Entry, Gender, Patient } from "../../types";
 import { useEffect, useState } from "react";
 import EntryList from "./entryList";
+import EntryForm from "./entryForm";
 
 interface Props {
   patientService: (id: string) => Promise<Patient>;
@@ -23,6 +24,14 @@ const PatientPage = ({ patientService }: Props) => {
 
   if (!patient) return <p>Could not find patient.</p>;
 
+  const setEntries = (entries: Entry[]) => {
+    const updatetPatient = {
+      ...patient,
+      entries,
+    };
+    setPatient(updatetPatient);
+  };
+
   return (
     <>
       <h3>
@@ -37,6 +46,12 @@ const PatientPage = ({ patientService }: Props) => {
       </h3>
       <div>SSN: {patient.ssn}</div>
       <div>Occupation: {patient.occupation}</div>
+
+      <EntryForm
+        patienId={patient.id}
+        entries={patient.entries}
+        setEntries={setEntries}
+      />
       <EntryList entries={patient.entries} />
     </>
   );
