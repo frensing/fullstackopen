@@ -27,6 +27,11 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3,
 }
 
+export interface Discharge {
+  date: string;
+  criteria: string;
+}
+
 interface BaseEntry {
   id: string;
   description: string;
@@ -42,10 +47,7 @@ interface HealthCheckEntry extends BaseEntry {
 
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  discharge: {
-    date: string;
-    criteria: string;
-  };
+  discharge: Discharge;
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
@@ -66,6 +68,9 @@ export type Entry =
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never;
+
+export type BaseEntryWithoutId = Omit<BaseEntry, "id">;
+
 // Define Entry without the 'id' property
 export type EntryWithoutId = UnionOmit<Entry, "id">;
 
