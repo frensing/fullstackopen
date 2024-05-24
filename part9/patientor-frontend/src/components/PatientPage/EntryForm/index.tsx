@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import patientService from "../../../services/patients";
+import diagnoseService from "../../../services/diagnoses";
 import axios from "axios";
 import { Entry } from "../../../types";
 import HealthCheckForm from "./HealthCheckForm";
 import HospitalForm from "./HospitalForm";
 import OccupationalHealthcareForm from "./OccupationalHealthcareForm";
+import {
+  Checkbox,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 
 interface BaseEntry {
   type: string;
@@ -30,7 +39,7 @@ const EntryForm = ({
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
-  const [diagnosisCodes, setDiagnosisCodes] = useState("");
+  const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
 
   const [healthRating, setHealthRating] = useState("");
 
@@ -41,6 +50,14 @@ const EntryForm = ({
   const [sickLeaveStart, setSickLeaveStart] = useState("");
   const [sickLeaveEnd, setSickLeaveEnd] = useState("");
 
+  const [diagnoseCodeList, setDiagnoseCodeList] = useState<string[]>([]);
+
+  useEffect(() => {
+    diagnoseService
+      .getAll()
+      .then((data) => setDiagnoseCodeList(data.map((d) => d.code)));
+  }, []);
+
   const entryCreation = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
@@ -49,7 +66,7 @@ const EntryForm = ({
       date,
       description,
       specialist,
-      diagnosisCodes: diagnosisCodes.split(",").map((x) => x.trim()),
+      diagnosisCodes: diagnosisCodes,
     };
 
     const newEntry = populateEntry(baseEntry);
@@ -62,7 +79,7 @@ const EntryForm = ({
         setDescription("");
         setDate("");
         setSpecialist("");
-        setDiagnosisCodes("");
+        setDiagnosisCodes([]);
 
         setHealthRating("");
 
@@ -111,6 +128,13 @@ const EntryForm = ({
     }
   };
 
+  const handleChange = (event: SelectChangeEvent<typeof diagnosisCodes>) => {
+    const {
+      target: { value },
+    } = event;
+    setDiagnosisCodes(typeof value === "string" ? value.split(",") : value);
+  };
+
   return (
     <div style={{ border: "dashed", padding: "5px" }}>
       <b>New {type} entry</b>
@@ -140,10 +164,20 @@ const EntryForm = ({
         </div>
         Diagnosis Codes
         <div>
-          <input
+          <Select
+            multiple
             value={diagnosisCodes}
-            onChange={(e) => setDiagnosisCodes(e.target.value)}
-          />
+            onChange={handleChange}
+            input={<OutlinedInput label="Tag" />}
+            renderValue={(selected) => selected.join(", ")}
+          >
+            {diagnoseCodeList.map((code) => (
+              <MenuItem key={code} value={code}>
+                <Checkbox checked={diagnosisCodes.indexOf(code) > -1} />
+                <ListItemText primary={code} />
+              </MenuItem>
+            ))}
+          </Select>
         </div>
         {type === "HealthCheck" && (
           <HealthCheckForm
