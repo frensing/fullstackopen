@@ -31,7 +31,6 @@ const parseString = (text: unknown): string => {
 
 const parseDate = (date: unknown): string => {
   if (!isString(date) || !isDate(date)) {
-    console.log(date, isString(date), isDate(date as string));
     throw new Error("Incorrect date: " + date);
   }
   return date;
@@ -101,15 +100,12 @@ export const toNewEntry = (object: unknown): EntryWithoutId => {
     "specialist" in object &&
     "type" in object
   ) {
-    let newEntry: BaseEntryWithoutId = {
+    const newEntry: BaseEntryWithoutId = {
       ...object,
       date: parseDate(object.date),
       description: parseString(object.description),
       specialist: parseString(object.specialist),
-      diagnosisCodes:
-        "diagnosisCodes" in object
-          ? parseDiagnosisCodes(object.diagnosisCodes)
-          : undefined,
+      diagnosisCodes: parseDiagnosisCodes(object),
     };
 
     switch (object.type) {

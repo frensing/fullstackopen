@@ -3,7 +3,7 @@ import { Female, Male, Transgender } from "@mui/icons-material";
 import { Entry, Gender, Patient } from "../../types";
 import { useEffect, useState } from "react";
 import EntryList from "./entryList";
-import EntryForm from "./entryForm";
+import EntryForm from "./EntryForm";
 
 interface Props {
   patientService: (id: string) => Promise<Patient>;
@@ -51,7 +51,23 @@ const PatientPage = ({ patientService }: Props) => {
         patienId={patient.id}
         entries={patient.entries}
         setEntries={setEntries}
+        type="HealthCheck"
       />
+
+      <EntryForm
+        patienId={patient.id}
+        entries={patient.entries}
+        setEntries={setEntries}
+        type="Hospital"
+      />
+
+      <EntryForm
+        patienId={patient.id}
+        entries={patient.entries}
+        setEntries={setEntries}
+        type="OccupationalHealthcare"
+      />
+
       <EntryList entries={patient.entries} />
     </>
   );
